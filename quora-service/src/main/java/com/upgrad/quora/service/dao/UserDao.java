@@ -2,7 +2,7 @@ package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.UserEntity;
 //import com.upgrad.quora.service.entity.userAuthEntity;
-import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -55,6 +55,15 @@ public class UserDao {
                     setParameter("userName", userName).getSingleResult();
         }catch (NoResultException nre)
         {
+            return null;
+        }
+    }
+
+    public UserAuthEntity getUserAuthEntity(final String accessToken){
+        try {
+            return entityManager.createNamedQuery("userAuthTokenbyAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+        }
+        catch(NoResultException ex){
             return null;
         }
     }
