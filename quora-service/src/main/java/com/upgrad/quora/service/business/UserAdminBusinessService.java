@@ -1,5 +1,6 @@
 package com.upgrad.quora.service.business;
 
+import com.upgrad.quora.service.dao.UserAuthDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
@@ -14,9 +15,12 @@ public class UserAdminBusinessService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private UserAuthDao userAuthDao;
+
     public UserEntity getUser(final String userUuid, final String authorization) throws UserNotFoundException, AuthorizationFailedException{
         UserEntity userEntity;
-        UserAuthEntity userAuthTokenEntity = userDao.getUserAuthEntity(authorization);
+        UserAuthEntity userAuthTokenEntity = userAuthDao.getUserAuthEntity(authorization);
         if(userAuthTokenEntity == null){
             throw new AuthorizationFailedException("ATHR-001","User has not signed in");
         }

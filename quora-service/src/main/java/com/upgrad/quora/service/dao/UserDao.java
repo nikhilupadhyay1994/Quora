@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 public class UserDao {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -21,6 +22,7 @@ public class UserDao {
         entityManager.persist(userEntity);
         return userEntity;
     }
+
     public UserEntity getUser( final String uuid) throws UserNotFoundException {
         try {
             return entityManager.createNamedQuery("userByUuid",UserEntity.class).
@@ -59,12 +61,10 @@ public class UserDao {
         }
     }
 
-    public UserAuthEntity getUserAuthEntity(final String accessToken){
-        try {
-            return entityManager.createNamedQuery("userAuthTokenbyAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
-        }
-        catch(NoResultException ex){
-            return null;
-        }
+
+
+    public void updateUser(final UserEntity updatedUserEntity){
+        entityManager.merge(updatedUserEntity);
     }
+
 }
