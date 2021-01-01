@@ -10,18 +10,16 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "question")
+@Table(name = "answer")
 @NamedQueries(
         {
-                @NamedQuery(name = "questionById", query = "select q from QuestionEntity q where q.id = :questionId")
+                //  @NamedQuery(name = "updateAnswerByUuid", query = "update Answer a set a.ans=:ans where a.uuid=:uuid"),
+                @NamedQuery(name = "UserForAnswer", query = "select a from Answer a where a.uuid=:uuid"),
         }
 )
-public class QuestionEntity implements Serializable {
+public class Answer implements Serializable {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,21 +29,19 @@ public class QuestionEntity implements Serializable {
     @NotNull
     private String uuid;
 
-    @Column(name="content")
+    @Column(name="ans")
     @NotNull
-    private String content;
-
-    @Column(name = "date")
-    @NotNull
-    private ZonedDateTime date;
+    private String ans;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Cascade(CascadeType.DELETE)
     private UserEntity user;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "question_id")
     @Cascade(CascadeType.DELETE)
-    private List<Answer> answers = new ArrayList<>();
+    private QuestionEntity question;
 
     public Integer getId() {
         return id;
@@ -53,14 +49,6 @@ public class QuestionEntity implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
     }
 
     public String getUuid() {
@@ -71,20 +59,12 @@ public class QuestionEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    public String getContent() {
-        return content;
+    public String getAnswer() {
+        return ans;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public ZonedDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(ZonedDateTime timeStamp) {
-        this.date = timeStamp;
+    public void setAnswer(String ans) {
+        this.ans = ans;
     }
 
     public UserEntity getUser() {
@@ -95,7 +75,13 @@ public class QuestionEntity implements Serializable {
         this.user = user;
     }
 
+    public QuestionEntity getQuestion() {
+        return question;
+    }
 
+    public void setQuestion(QuestionEntity question) {
+        this.question = question;
+    }
     @Override
     public boolean equals(Object obj) {
         return new EqualsBuilder().append(this, obj).isEquals();
@@ -110,6 +96,7 @@ public class QuestionEntity implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
+
 
 
 }
