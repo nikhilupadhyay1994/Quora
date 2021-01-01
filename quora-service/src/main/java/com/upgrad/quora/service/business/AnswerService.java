@@ -1,8 +1,10 @@
 package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.dao.AnswerDao;
+import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserAuthDao;
 import com.upgrad.quora.service.entity.Answer;
+import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
@@ -17,6 +19,9 @@ import java.util.List;
 public class AnswerService {
     @Autowired
     AnswerDao answerDao;
+
+    @Autowired
+    QuestionDao questionDao;
 
     @Autowired
     UserAuthDao authTokenDao;
@@ -54,16 +59,17 @@ public class AnswerService {
 
         if(userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }else if(userAuthTokenEntity.getLogoutAt() != null)
+        {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
+        }else {
+            List answers=  answerDao.getAnswersForQuestionId(questionId);
+            if(answers.isEmpty()){
+                throw new InvalidQuestionException("QUES-001", "The question with entered uuid whose details are to be seen does not exist");
+            }
+            return answers;
         }
 
-        if(userAuthTokenEntity.getExpiresAt().isBefore(ZonedDateTime.now()) || userAuthTokenEntity.getLogoutAt().isBefore(ZonedDateTime.now())) {
-            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
-        }
 
-        List answers=  answerDao.getAnswersForQuestionId(questionId);
-        if(answers == null){
-            throw new InvalidQuestionException("QUES-001", "The question with entered uuid whose details are to be seen does not exist");
-        }
-        return answers;
     }
 }

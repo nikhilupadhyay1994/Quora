@@ -46,7 +46,11 @@ public class AnswerDao {
     public List<Answer> getAnswersForQuestionId(String questionId) {
         try
         {
-            List answers= entityManager.createQuery("SELECT a,q from Answer a, QuestionEntity q where a.question=q and q.id =:questionId").setParameter("questionId", questionId).getResultList();
+
+            // List answers= entityManager.createQuery("SELECT a from Answer a JOIN QuestionEntity q where q.uuid =:questionId", Answer.class).setParameter("questionId", questionId).getResultList();
+            List answers= entityManager.createQuery("SELECT a from Answer a where a.question.uuid =:questionId", Answer.class).setParameter("questionId", questionId).getResultList();
+
+
             return answers;
         }catch (NoResultException nre)
         {

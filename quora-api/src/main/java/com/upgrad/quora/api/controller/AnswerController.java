@@ -37,15 +37,18 @@ public class AnswerController {
         return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "answer/all/{questionId}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerDetailsResponse> getAnswers(@RequestHeader("authorization") final String authorization, @PathVariable("questionId") final String questionId) throws AuthorizationFailedException, InvalidQuestionException {
 
         List<Answer> answers=answerService.getAnswersForQuestionId(questionId, authorization);
-        String uuid=answers.get(0).getUuid();
-        String questionContent=answers.get(0).getQuestion().getContent();
+        String uuid=questionId;
         String answerContent="";
-        for (Object answer:answers) {
-            answerContent+=answer.toString();
+        String questionContent="";
+
+
+        for (Answer answer:answers) {
+            answerContent+=answerContent+answer.getAnswer();
+            questionContent=answer.getQuestion().getContent();
         }
         AnswerDetailsResponse answerDetailsResponse= new AnswerDetailsResponse();
         answerDetailsResponse.setId(uuid);

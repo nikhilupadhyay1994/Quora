@@ -21,12 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
     @Autowired
     private QuestionBusinessService questionBusinessService;
-    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable("questionId") final Integer questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         questionBusinessService.deleteQuestion(questionId, authorization);
-        String strQsnId=questionId.toString();
-        QuestionDeleteResponse qsnDeleteResponse = new QuestionDeleteResponse().id(strQsnId).status("DELETED");
+        QuestionDeleteResponse qsnDeleteResponse = new QuestionDeleteResponse().id(questionId).status("DELETED");
         return new ResponseEntity<QuestionDeleteResponse>(qsnDeleteResponse, HttpStatus.OK);
     }
 

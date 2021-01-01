@@ -5,6 +5,7 @@ import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -16,21 +17,13 @@ public class QuestionDao {
     @PersistenceContext
     private EntityManager em;
 
-
-    public void deleteQuestion(Integer questionId) {
-        EntityTransaction transaction = em.getTransaction();
-
-        try {
-            transaction.begin();
-            QuestionEntity question = (QuestionEntity) em.find(QuestionEntity.class, questionId);
-            em.remove(question);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-        }
+    @Transactional
+    public void deleteQuestion(String questionId) {
+        QuestionEntity question = this.getQuestionById(questionId);
+        em.remove(question);
     }
 
-    public QuestionEntity getQuestionById( Integer questionId) throws InvalidQuestionException {
+    public QuestionEntity getQuestionById( String questionId)   {
         try {
             return em.createNamedQuery("questionById",QuestionEntity.class).
                     setParameter("questionId", questionId).getSingleResult();

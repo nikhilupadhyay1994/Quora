@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "question")
 @NamedQueries(
         {
-                @NamedQuery(name = "questionById", query = "select q from QuestionEntity q where q.id = :questionId")
+                @NamedQuery(name = "questionById", query = "select q from QuestionEntity q where q.uuid = :questionId")
         }
 )
 public class QuestionEntity implements Serializable {
@@ -43,9 +43,6 @@ public class QuestionEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @Cascade(CascadeType.DELETE)
-    private List<Answer> answers = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -55,13 +52,6 @@ public class QuestionEntity implements Serializable {
         this.id = id;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
 
     public String getUuid() {
         return uuid;
