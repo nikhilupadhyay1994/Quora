@@ -4,7 +4,7 @@ import com.upgrad.quora.service.dao.AnswerDao;
 import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserAuthDao;
 import com.upgrad.quora.service.entity.Answer;
-import com.upgrad.quora.service.entity.QuestionEntity;
+import com.upgrad.quora.service.entity.Question;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
@@ -29,7 +29,7 @@ public class AnswerService {
 
     public String editAnswerContent(final String uuid, final String ans, final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
-        UserAuthEntity userAuthEntity=  authTokenDao.getUserAuthToken(authorization);
+        UserAuthEntity userAuthEntity=  authTokenDao.getUserAuthEntity(authorization);
         if(userAuthEntity== null)
         {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
@@ -55,7 +55,7 @@ public class AnswerService {
 
     public List<Answer> getAnswersForQuestionId(String questionId, String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
-        UserAuthEntity userAuthTokenEntity = authTokenDao.getUserAuthToken(authorization);
+        UserAuthEntity userAuthTokenEntity = authTokenDao.getUserAuthEntity(authorization);
 
         if(userAuthTokenEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
