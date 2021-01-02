@@ -10,13 +10,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @NamedQueries(
-        {
-                @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid"),
-                @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName = :userName"),
-                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email =:email")
-        }
+        @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid")
 )
 public class UserEntity implements Serializable {
     @Id
@@ -34,18 +30,17 @@ public class UserEntity implements Serializable {
     @Column(name="lastname")
     private String lastName;
 
-    @Column(name="username")
+    @Column(name="username" , unique = true)
     @NotNull
     private String userName;
 
-    @Column(name="email")
+    @Column(name="email", nullable = false)
     private String email;
 
-
-    @Column(name="password")
+    @Column(name="password", nullable = false)
     private String password;
 
-    @Column(name="salt")
+    @Column(name="salt", nullable = false)
     private String salt;
 
     @Column(name="country")
@@ -62,7 +57,7 @@ public class UserEntity implements Serializable {
 
     @Column(name="dob")
     @NotNull
-    private String dob;
+    private ZonedDateTime dob;
 
     public Integer getId() {
         return id;
@@ -160,11 +155,11 @@ public class UserEntity implements Serializable {
         this.role = role;
     }
 
-    public String getDob() {
+    public ZonedDateTime getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(ZonedDateTime dob) {
         this.dob = dob;
     }
     @Override

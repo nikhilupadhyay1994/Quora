@@ -12,11 +12,11 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "answer")
+@Table(name = "ANSWER")
 @NamedQueries(
         {
-                //  @NamedQuery(name = "updateAnswerByUuid", query = "update Answer a set a.ans=:ans where a.uuid=:uuid"),
-                @NamedQuery(name = "UserForAnswer", query = "select a from Answer a where a.uuid=:uuid"),
+              //  @NamedQuery(name = "updateAnswerByUuid", query = "update Answer a set a.ans=:ans where a.uuid=:uuid"),
+                @NamedQuery(name = "UserForAnswer", query = "select a from Answer a where a.uuid=:uuid")
         }
 )
 public class Answer implements Serializable {
@@ -41,7 +41,7 @@ public class Answer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "question_id")
     @Cascade(CascadeType.DELETE)
-    private QuestionEntity question;
+    private Question question;
 
     public Integer getId() {
         return id;
@@ -75,11 +75,11 @@ public class Answer implements Serializable {
         this.user = user;
     }
 
-    public QuestionEntity getQuestion() {
+    public Question getQuestion() {
         return question;
     }
 
-    public void setQuestion(QuestionEntity question) {
+    public void setQuestion(Question question) {
         this.question = question;
     }
     @Override
