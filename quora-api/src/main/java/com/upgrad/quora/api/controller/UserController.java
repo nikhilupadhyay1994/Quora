@@ -29,11 +29,11 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private SignupBusinessService signupBusinessService;
-
+   
     @Autowired
     private AuthenticationService authenticationService;
 
-    @RequestMapping(method = RequestMethod.POST, path = "/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+        @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
         public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
             final UserEntity userEntity = new UserEntity();
             userEntity.setUuid(UUID.randomUUID().toString());
