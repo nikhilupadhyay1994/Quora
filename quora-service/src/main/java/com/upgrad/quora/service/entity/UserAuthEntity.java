@@ -1,7 +1,5 @@
 package com.upgrad.quora.service.entity;
 
-
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,7 +12,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-@Entity
+
+/*<<<<<<< Development
 @Table(name = "user_auth")
 @NamedQueries({
         @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthEntity ut where ut.accessToken = :accessToken ")
@@ -25,6 +24,19 @@ public class UserAuthEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
+=======*/
+@Entity
+@Table(name = "USER_AUTH")
+@NamedQueries(
+        {
+            @NamedQuery(name = "userAuthTokenbyAccessToken", query = "select ut from UserAuthEntity ut where ut.accessToken = :accessToken")
+        }
+)
+public class UserAuthEntity implements Serializable {
+
+
+    @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -34,6 +46,7 @@ public class UserAuthEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Cascade(CascadeType.DELETE)
     private UserEntity user;
 
     @Column(name = "ACCESS_TOKEN")
@@ -122,7 +135,4 @@ public class UserAuthEntity implements Serializable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
-
-
 }
-
