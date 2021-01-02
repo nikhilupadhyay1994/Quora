@@ -9,35 +9,18 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 public class UserAuthDao {
-
     @PersistenceContext
     private EntityManager entityManager;
-    
-  /*public UserAuthEntity getUserAuthToken(final String accessToken)  {
+    public UserAuthEntity getUserAuthEntity(final String accessToken)  {
         try
         {
             return entityManager.createNamedQuery("userAuthTokenByAccessToken",
                     UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
-        }
-        catch (NoResultException nre)
+        }catch (NoResultException nre)
         {
             return null;
         }
 
-  }*/
 
-
-    public UserAuthEntity getUserAuthEntity(final String accessToken){
-        try {
-            return entityManager.createNamedQuery("userAuthTokenbyAccessToken", UserAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
-        }
-        catch(NoResultException ex){
-            return null;
-        }
-    }
-
-    public UserAuthEntity createAuthToken(final UserAuthEntity userAuthTokenEntity){
-        entityManager.persist(userAuthTokenEntity);
-        return userAuthTokenEntity;
     }
 }

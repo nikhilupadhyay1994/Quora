@@ -11,17 +11,18 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "question")
+@Table(name = "QUESTION")
 @NamedQueries(
         {
-                @NamedQuery(name = "questionById", query = "select q from QuestionEntity q where q.uuid = :questionId")
+                @NamedQuery(name = "Allquestion", query = "select q from Question q" ),
+                @NamedQuery(name = "AllquestionByUserId", query = "select q from Question q where q.user.id=:id" ),
+                @NamedQuery(name = "questionById", query = "select q from Question q where q.uuid = :questionId")
         }
+
 )
-public class QuestionEntity implements Serializable {
+public class Question implements Serializable {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +42,8 @@ public class QuestionEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Cascade(CascadeType.DELETE)
     private UserEntity user;
-
 
     public Integer getId() {
         return id;
@@ -51,7 +52,6 @@ public class QuestionEntity implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
 
     public String getUuid() {
         return uuid;
@@ -69,12 +69,12 @@ public class QuestionEntity implements Serializable {
         this.content = content;
     }
 
-    public ZonedDateTime getDate() {
+    public ZonedDateTime getTimeStamp() {
         return date;
     }
 
-    public void setDate(ZonedDateTime timeStamp) {
-        this.date = timeStamp;
+    public void setTimeStamp(ZonedDateTime date) {
+        this.date = date;
     }
 
     public UserEntity getUser() {

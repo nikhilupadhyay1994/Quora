@@ -6,15 +6,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-
-/*<<<<<<< Development
-@Table(name = "user_auth")
+@Entity
+@Table(name = "USER_AUTH")
 @NamedQueries({
         @NamedQuery(name = "userAuthTokenByAccessToken", query = "select ut from UserAuthEntity ut where ut.accessToken = :accessToken ")
 })
@@ -24,19 +25,6 @@ public class UserAuthEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
-=======*/
-@Entity
-@Table(name = "USER_AUTH")
-@NamedQueries(
-        {
-            @NamedQuery(name = "userAuthTokenbyAccessToken", query = "select ut from UserAuthEntity ut where ut.accessToken = :accessToken")
-        }
-)
-public class UserAuthEntity implements Serializable {
-
-
-    @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -45,8 +33,8 @@ public class UserAuthEntity implements Serializable {
     private String uuid;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Cascade(CascadeType.DELETE)
+    @JoinColumn(name = "USER_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserEntity user;
 
     @Column(name = "ACCESS_TOKEN")
@@ -134,5 +122,7 @@ public class UserAuthEntity implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
+
+
 
 }
