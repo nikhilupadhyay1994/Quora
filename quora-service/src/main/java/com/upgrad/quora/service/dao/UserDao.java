@@ -2,7 +2,7 @@ package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.UserEntity;
 //import com.upgrad.quora.service.entity.userAuthEntity;
-import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 public class UserDao {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -21,6 +22,7 @@ public class UserDao {
         entityManager.persist(userEntity);
         return userEntity;
     }
+
     public UserEntity getUser( final String uuid) throws UserNotFoundException {
         try {
             return entityManager.createNamedQuery("userByUuid",UserEntity.class).
@@ -58,4 +60,11 @@ public class UserDao {
             return null;
         }
     }
+
+
+
+    public void updateUser(final UserEntity updatedUserEntity){
+        entityManager.merge(updatedUserEntity);
+    }
+
 }
