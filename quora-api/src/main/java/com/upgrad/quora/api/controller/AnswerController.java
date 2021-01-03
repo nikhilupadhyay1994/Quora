@@ -1,13 +1,12 @@
 package com.upgrad.quora.api.controller;
 
 
-import com.upgrad.quora.api.model.AnswerDetailsResponse;
-import com.upgrad.quora.api.model.AnswerEditRequest;
-import com.upgrad.quora.api.model.AnswerEditResponse;
+import com.upgrad.quora.api.model.*;
 import com.upgrad.quora.service.business.AnswerService;
+import com.upgrad.quora.service.business.AuthenticationService;
 import com.upgrad.quora.service.business.QuestionBusinessService;
 import com.upgrad.quora.service.entity.Answer;
-import com.upgrad.quora.service.entity.QuestionEntity;
+import com.upgrad.quora.service.entity.Question;
 import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
@@ -27,8 +26,10 @@ import java.util.List;
 public class AnswerController {
 
     @Autowired
-    AnswerService answerService;
-    QuestionBusinessService questionBusinessService;
+    private AnswerService answerService;
+    private QuestionBusinessService questionBusinessService;
+    private AuthenticationService authenticationService;
+
 
     @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerEditResponse> editAnswerContent(@RequestHeader("authorization") final String authorization, @PathVariable("answerId") final String answeruuid, @RequestBody AnswerEditRequest answerEditRequest) throws AuthorizationFailedException, UserNotFoundException, AnswerNotFoundException {
@@ -58,4 +59,15 @@ public class AnswerController {
 
         return new ResponseEntity<AnswerDetailsResponse>(answerDetailsResponse, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, path="/answer/delete/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@RequestHeader("authorization") final String authorizationToken, @PathVariable("answerId") final String answerId) throws UserNotFoundException, AuthorizationFailedException, AnswerNotFoundException {
+        AnswerDeleteResponse answerDeleteResponse = null;
+
+        Answer answer = answerService.deleteAnswer(answerId, authorizationToken);
+        answerDeleteResponse = new AnswerDeleteResponse().id(answer.getUuid()).status("ANSWER DELETED");
+
+        return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse,HttpStatus.OK);
+    }
+
 }

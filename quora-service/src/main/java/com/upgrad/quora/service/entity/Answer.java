@@ -15,8 +15,7 @@ import java.io.Serializable;
 @Table(name = "answer")
 @NamedQueries(
         {
-                //  @NamedQuery(name = "updateAnswerByUuid", query = "update Answer a set a.ans=:ans where a.uuid=:uuid"),
-                @NamedQuery(name = "UserForAnswer", query = "select a from Answer a where a.uuid=:uuid"),
+                @NamedQuery(name = "UserForAnswer", query = "select a from Answer a where a.uuid=:uuid")
         }
 )
 public class Answer implements Serializable {

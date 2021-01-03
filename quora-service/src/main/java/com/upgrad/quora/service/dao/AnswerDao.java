@@ -11,7 +11,7 @@ import java.util.List;
 public class AnswerDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Transactional
     public String editAnswerContent(final String uuid, final String ans)
@@ -30,6 +30,7 @@ public class AnswerDao {
         }
         return uuid;
     }
+
     public String getUserForAnswer(final String uuid)
     {
         try
@@ -52,10 +53,26 @@ public class AnswerDao {
 
 
             return answers;
-        }catch (NoResultException nre)
+        }
+        catch (NoResultException nre)
         {
             return null;
         }
+    }
+
+    public Answer getAnswerById(String answerId){
+        try{
+            return entityManager.createQuery("select a from Answer a where a.uuid=:uuid", Answer.class).setParameter("uuid", answerId).getSingleResult();
+        }
+        catch(NoResultException ex){
+            return null;
+        }
+    }
+
+    @Transactional
+    public void deleteAnswer(String answerId){
+        Answer answerEntity = this.getAnswerById(answerId);
+        entityManager.remove(answerEntity);
     }
 }
 
