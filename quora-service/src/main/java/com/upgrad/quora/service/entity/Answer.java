@@ -10,6 +10,7 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "answer")
@@ -40,7 +41,19 @@ public class Answer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "question_id")
     @Cascade(CascadeType.DELETE)
-    private QuestionEntity question;
+    private Question question;
+
+    @Column(name = "date")
+    @NotNull
+    private ZonedDateTime timeStamp;
+
+    public ZonedDateTime getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(ZonedDateTime timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
     public Integer getId() {
         return id;
@@ -74,11 +87,11 @@ public class Answer implements Serializable {
         this.user = user;
     }
 
-    public QuestionEntity getQuestion() {
+    public Question getQuestion() {
         return question;
     }
 
-    public void setQuestion(QuestionEntity question) {
+    public void setQuestion(Question question) {
         this.question = question;
     }
     @Override

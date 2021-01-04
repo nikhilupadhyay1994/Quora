@@ -14,6 +14,13 @@ public class AnswerDao {
     private EntityManager entityManager;
 
     @Transactional
+    public Answer createAnswer(Answer answerEntity)
+    {
+        entityManager.persist(answerEntity);
+        return answerEntity;
+    }
+
+    @Transactional
     public String editAnswerContent(final String uuid, final String ans)
     {
         try
