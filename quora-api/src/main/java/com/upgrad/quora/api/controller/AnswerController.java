@@ -55,7 +55,7 @@ public class AnswerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDetailsResponse> getAnswers(@RequestHeader("authorization") final String authorization, @PathVariable("questionId") final String questionId) throws AuthorizationFailedException, InvalidQuestionException {
+    public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@RequestHeader("authorization") final String authorization, @PathVariable("questionId") final String questionId) throws AuthorizationFailedException, InvalidQuestionException {
 
         List<Answer> answers=answerService.getAnswersForQuestionId(questionId, authorization);
         String uuid=questionId;
